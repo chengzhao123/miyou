@@ -24,13 +24,12 @@ var a= 0
                 if(info) {
                     socketModel.updateOne({tel:res.tel},{$set: {isLogin :true}},(err ,data) => {})
                    //下线收到的消息
-                   if(info && info.notGetMsg && info.notGetMsg.length > 0) {
-
+                   if(info.notGetMsg && info.notGetMsg.length > 0) {
                       io.emit('notGetMsg',info.notGetMsg)
                       socketModel.updateOne({tel:res.tel},{$set: {notGetMsg: []}},(err ,data) => {})
                    }
                    //下线收到的好友申请
-                   if(info && info.newFirend && info.newFirend.length > 0) {
+                   if(info.newFirend && info.newFirend.length > 0) {
                     io.emit('newFirend',info.newFirend)
                     socketModel.updateOne({tel:res.tel},{$set: {newFirend : [] }},(err ,data) => {})
                    }
@@ -124,23 +123,23 @@ var a= 0
         // 用户退出登录
         socket.on('quit', res =>{
             var arr = Object.keys(userId) 
-                for (var i = 0; i < arr.length; i++) {
-                    if(arr[i] == res) {
-                        socketModel.updateOne({tel: res},{$set: {isLogin : false}},(err ,data) => {})
-                        delete userId[arr[i]]
-                    }
+            for (var i = 0; i < arr.length; i++) {
+                if(arr[i] == res) {
+                    socketModel.updateOne({tel: res},{$set: {isLogin : false}},(err ,data) => {})
+                    delete userId[arr[i]]
                 }
+            }
         })
         // 断开连接
         socket.on('disconnect', () =>{
             a--
             var arr = Object.keys(userId) 
-                for (var i = 0; i < arr.length; i++) {
-                    if(userId[arr[i]] == socket.id) {
-                        socketModel.updateOne({tel: Number(arr[i])},{$set: {isLogin : false}},(err ,data) => {})
-                        delete userId[arr[i]]
-                    }
+            for (var i = 0; i < arr.length; i++) {
+                if(userId[arr[i]] == socket.id) {
+                    socketModel.updateOne({tel: Number(arr[i])},{$set: {isLogin : false}},(err ,data) => {})
+                    delete userId[arr[i]]
                 }
+            }
             console.log(socket.id +'断开链接,还剩下' + a+'人')
         })
     })
@@ -185,5 +184,5 @@ app.use('/friend/agree',friendAgree)
 app.use('/friend/reject',friendReject)
 
 http.listen(8080,function(){
-    console.log('在8080端口啊')
+    console.log('在8081端口啊')
 })
