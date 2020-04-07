@@ -16,8 +16,7 @@ var a= 0
         console.log(a+'人连接')
         // 登录
         socket.on('login', res =>{
-            socketModel.find({tel:res.tel },(err,data) =>{
-                const info =JSON.parse(JSON.stringify(data))[0]
+            socketModel.findOne({tel:res.tel },(err,info) =>{
                 userId[res.tel] = socket.id
                 console.log(userId)
                 // 上线通知
@@ -26,6 +25,7 @@ var a= 0
                     socketModel.updateOne({tel:res.tel},{$set: {isLogin :true}},(err ,data) => {})
                    //下线收到的消息
                    if(info && info.notGetMsg && info.notGetMsg.length > 0) {
+
                       io.emit('notGetMsg',info.notGetMsg)
                       socketModel.updateOne({tel:res.tel},{$set: {notGetMsg: []}},(err ,data) => {})
                    }
@@ -92,8 +92,7 @@ var a= 0
         })
         //发送私聊消息
          socket.on('sendMsg',res => {
-               socketModel.find({tel: res.histel},(err,data)=>{
-                    const info =JSON.parse(JSON.stringify(data))[0]
+               socketModel.findOne({tel: res.histel},(err,info)=>{
                     // 如果对方在线
                     if(info && info.isLogin == true) {
                       io.emit('getMsg', res)
@@ -111,8 +110,7 @@ var a= 0
         })
         //发送申请
         socket.on('addFriend', res =>{
-            socketModel.find({tel: res.histel},(err,data)=>{
-                const info =JSON.parse(JSON.stringify(data))[0]
+            socketModel.findOne({tel: res.histel},(err,info)=>{
                 if(info && info.isLogin == true) {
                   io.emit('getFriend',res)
                   userModel.findOne({tel: res.histel}, (err,data) => {
@@ -128,8 +126,8 @@ var a= 0
             var arr = Object.keys(userId) 
                 for (var i = 0; i < arr.length; i++) {
                     if(arr[i] == res) {
-                        delete userId[arr[i]]
                         socketModel.updateOne({tel: res},{$set: {isLogin : false}},(err ,data) => {})
+                        delete userId[arr[i]]
                     }
                 }
         })
@@ -139,8 +137,8 @@ var a= 0
             var arr = Object.keys(userId) 
                 for (var i = 0; i < arr.length; i++) {
                     if(userId[arr[i]] == socket.id) {
+                        socketModel.updateOne({tel: Number(arr[i])},{$set: {isLogin : false}},(err ,data) => {})
                         delete userId[arr[i]]
-                        socketModel.updateOne({tel: arr[i]},{$set: {isLogin : false}},(err ,data) => {})
                     }
                 }
             console.log(socket.id +'断开链接,还剩下' + a+'人')
