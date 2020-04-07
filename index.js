@@ -25,12 +25,16 @@ var a= 0
                     socketModel.updateOne({tel:res.tel},{$set: {isLogin :true}},(err ,data) => {})
                    //下线收到的消息
                    if(info.notGetMsg && info.notGetMsg.length > 0) {
-                      io.emit('notGetMsg',info.notGetMsg)
+                       setTimeout(() => {
+                          io.emit('notGetMsg',info.notGetMsg)
+                       }, 1500);
                       socketModel.updateOne({tel:res.tel},{$set: {notGetMsg: []}},(err ,data) => {})
                    }
                    //下线收到的好友申请
                    if(info.newFirend && info.newFirend.length > 0) {
-                    io.emit('newFirend',info.newFirend)
+                    setTimeout(() => {
+                      io.emit('newFirend',info.newFirend)
+                    }, 1500);
                     socketModel.updateOne({tel:res.tel},{$set: {newFirend : [] }},(err ,data) => {})
                    }
                 } else {
@@ -184,5 +188,5 @@ app.use('/friend/agree',friendAgree)
 app.use('/friend/reject',friendReject)
 
 http.listen(8080,function(){
-    console.log('在8081端口啊')
+    console.log('在8080端口啊')
 })
