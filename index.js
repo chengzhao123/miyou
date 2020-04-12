@@ -134,7 +134,12 @@ var a= 0
                 }
             }
         })
-        // 断开连接
+        //断开了重新连接
+        socket.on('reduankai', res =>{
+            userId[res] = socket.id
+            socketModel.updateOne({tel: Number(res)},{$set: {isLogin : true}},(err ,data) => {})
+        })
+        //断开了连接
         socket.on('disconnect', () =>{
             a--
             var arr = Object.keys(userId) 
