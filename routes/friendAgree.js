@@ -9,6 +9,7 @@ router.post('/', (req, res) => {
         tel: Number(req.body.histel),
         toTop: false,
         remove: false,
+        surePos: false,
         headimg: Number(req.body.hisheadimg),
         name: req.body.hisname // 对方名字
     }
@@ -20,6 +21,7 @@ router.post('/', (req, res) => {
         tel: Number(req.body.tel),
         toTop: false,
         remove: false,
+        surePos: false,
         headimg: Number(req.body.headimg),
         name: req.body.name // 对方名字
     }
