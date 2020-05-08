@@ -260,6 +260,6 @@ app.use('/friend/agree',friendAgree)
 app.use('/friend/reject',friendReject)
 app.use('/friend/delete',friendDelete)
 
-http.listen(8081,function(){
-    console.log('在8081端口啊')
+http.listen(8080,function(){
+    console.log('在8080端口啊')
 })
